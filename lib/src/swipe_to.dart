@@ -97,11 +97,13 @@ class _SwipeToState extends State<SwipeTo> with SingleTickerProviderStateMixin {
     _rightIconAnimation = _controller.drive(
       Tween<double>(begin: 0.0, end: 0.0),
     );
-    _onSwipeLeft = widget.onLeftSwipe ?? (details) {
+    _onSwipeLeft = widget.onLeftSwipe ??
+        (details) {
           log("Left Swipe Not Provided");
         };
 
-    _onSwipeRight = widget.onRightSwipe ?? (details) {
+    _onSwipeRight = widget.onRightSwipe ??
+        (details) {
           log("Right Swipe Not Provided");
         };
     _controller.addListener(() {
@@ -135,7 +137,7 @@ class _SwipeToState extends State<SwipeTo> with SingleTickerProviderStateMixin {
         CurvedAnimation(curve: Curves.decelerate, parent: _controller),
       );
     }
-    //Forward animation
+    // Forward animation
     _controller.forward().whenComplete(() {
       _controller.reverse().whenComplete(() {
         if (onRight) {
@@ -157,51 +159,55 @@ class _SwipeToState extends State<SwipeTo> with SingleTickerProviderStateMixin {
     return GestureDetector(
       onPanUpdate: (details) {
         if (details.delta.dx > 1 && widget.onRightSwipe != null) {
-          _runAnimation(onRight: true,  details: details);
+          _runAnimation(onRight: true, details: details);
         }
         if (details.delta.dx < -1 && widget.onLeftSwipe != null) {
           _runAnimation(onRight: false, details: details);
         }
       },
-      child: Stack(
-        alignment: Alignment.center,
-        fit: StackFit.passthrough,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              AnimatedOpacity(
-                opacity: _leftIconAnimation.value,
-                duration: widget.animationDuration,
-                curve: Curves.decelerate,
-                child: widget.rightSwipeWidget ??
-                    Icon(
-                      widget.iconOnRightSwipe,
-                      size: widget.iconSize,
-                      color:
-                          widget.iconColor ?? Theme.of(context).iconTheme.color,
-                    ),
-              ),
-              AnimatedOpacity(
-                opacity: _rightIconAnimation.value,
-                duration: widget.animationDuration,
-                curve: Curves.decelerate,
-                child: widget.leftSwipeWidget ??
-                    Icon(
-                      widget.iconOnLeftSwipe,
-                      size: widget.iconSize,
-                      color:
-                          widget.iconColor ?? Theme.of(context).iconTheme.color,
-                    ),
-              ),
-            ],
-          ),
-          SlideTransition(
-            position: _animation,
-            child: widget.child,
-          ),
-        ],
+      child: SlideTransition(
+        position: _animation,
+        child: widget.child,
       ),
+      // child: Stack(
+      //   alignment: Alignment.center,
+      //   fit: StackFit.passthrough,
+      //   children: [
+      //     Row(
+      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //       children: <Widget>[
+      //         AnimatedOpacity(
+      //           opacity: _leftIconAnimation.value,
+      //           duration: widget.animationDuration,
+      //           curve: Curves.decelerate,
+      //           child: widget.rightSwipeWidget ??
+      //               Icon(
+      //                 widget.iconOnRightSwipe,
+      //                 size: widget.iconSize,
+      //                 color:
+      //                     widget.iconColor ?? Theme.of(context).iconTheme.color,
+      //               ),
+      //         ),
+      //         AnimatedOpacity(
+      //           opacity: _rightIconAnimation.value,
+      //           duration: widget.animationDuration,
+      //           curve: Curves.decelerate,
+      //           child: widget.leftSwipeWidget ??
+      //               Icon(
+      //                 widget.iconOnLeftSwipe,
+      //                 size: widget.iconSize,
+      //                 color:
+      //                     widget.iconColor ?? Theme.of(context).iconTheme.color,
+      //               ),
+      //         ),
+      //       ],
+      //     ),
+      //     SlideTransition(
+      //       position: _animation,
+      //       child: widget.child,
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
